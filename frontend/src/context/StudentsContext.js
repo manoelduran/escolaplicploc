@@ -1,18 +1,14 @@
 import React, { useState, useContext } from "react";
 
-const initialState = {
-    id: "",
-    name: "",
-    cpf: "",
-    room: "",
-    registration_number: "",
-};
+
+
 
 export const StudentsContext = React.createContext({});
 
 function StudentsProvider({ children }) {
     const [students, setStudents] = useState([]);
-    const [student, setStudent] = useState(initialState);
+    const [student, setStudent] = useState({});
+    console.log('students', students)
 
     async function fetchStudents() {
         const studentsCollection = await fetch();
@@ -20,27 +16,31 @@ function StudentsProvider({ children }) {
     }
 
     async function createStudent(data) {
+        console.log('data', data)
         const newStudent = data;
         const updatedStudents = students.push(newStudent);
         setStudents(updatedStudents);
     }
 
-    async function updateStudent(id) {
-        const selectedStudent = students.find(student => student.id === id)
-
+    async function updateStudent(id, data) {
+        const selectedStudent = students.filter(student => student.id === id)
+        const updatedList = students.push(...selectedStudent, data);
+        setStudents(updatedList)
     }
 
     async function deleteStudent(id) {
-        const removedStudent = students.filter(student => student.id !== id)
-        setStudents(removedStudent)
+        const removedStudent = students.filter(student => student.id !== id);
+        setStudents(removedStudent);
     }
 
 
 
-    async function showStudent(id) {
-        students.find(student => student.id === id)
+    async function showStudent(room) {
+        const selectedStudent = students.find(student => student.room === room)
+        setStudent(selectedStudent);
     }
 
+ return (
     <StudentsContext.Provider value={{
         students,
         student,
@@ -53,6 +53,7 @@ function StudentsProvider({ children }) {
     }>
         {children}
     </StudentsContext.Provider >
+ )
 
 }
 

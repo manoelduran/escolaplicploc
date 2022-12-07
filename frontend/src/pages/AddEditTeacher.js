@@ -1,39 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
+import { useTeachers } from '../context/TeachersContext';
 import '../styles/addEditTeacher.css';
 
 const initialState = {
     name: "",
     cpf: "",
-    room: "",
-    registration_number: "",
+    academic_title: "",
+    subject: ""
 };
 
 function AddEditTeacher() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { createTeacher, updateTeacher, showTeacher } = useTeachers()
     const [editMode, setEditMode] = useState(false);
     const [formValue, setFormValue] = useState(initialState);
-    const { name, cpf, room, registration_number } = formValue;
+    const { name, cpf, academic_title, subject } = formValue;
 
     useEffect(() => {
         if (id) {
             setEditMode(true);
-            // setFormValue({ ...selectedTeacher });
+            const selectedTeacher = showTeacher(id)
+            setFormValue({ ...selectedTeacher });
         }
-    }, [id]);
+    }, [id, showTeacher]);
 
 
     const handleSubmit = (event) => {
         console.log('event', event)
         event.preventDefault();
-        if (name && cpf && room && registration_number && editMode) {
-            // updateTeacher({ id, formValue })
+        if (name && cpf && academic_title && subject && editMode) {
+            updateTeacher({ id, formValue })
             setEditMode(false);
             setTimeout(() => navigate("/"), 500);
             return;
         };
-        //  createTeacher(formValue);
+        createTeacher(formValue);
         setTimeout(() => navigate("/"), 500);
     };
 
@@ -53,8 +56,8 @@ function AddEditTeacher() {
                 <form onSubmit={handleSubmit}>
                     <input type='text' name='name' placeholder='Nome' required value={name || ""} onChange={onInputChange} />
                     <input type='cpf' name='cpf' title='CPF' placeholder='CPF' required value={cpf || ""} onChange={onInputChange} />
-                    <input type='text' name='registration_number' title='Matrícula' placeholder='Número de Matrícula' required value={registration_number || ""} onChange={onInputChange} />
-                    <input type='text' name='room' title='Sala' placeholder='Sala' required value={room || ""} onChange={onInputChange} />
+                    <input type='text' name='academic_title' title='Título Acadêmico' placeholder='Título Acadêmico' required value={academic_title || ""} onChange={onInputChange} />
+                    <input type='text' name='subject' title='Disciplina' placeholder='Disciplina' required value={subject || ""} onChange={onInputChange} />
                     <button type='submit' className='addStudentButton' style={{ marginTop: 15 }}>{editMode ? "Editar" : "Criar"}</button>
                 </form>
             </div>

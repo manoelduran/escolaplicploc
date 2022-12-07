@@ -6,14 +6,14 @@ import '../styles/addEditStudent.css';
 const initialState = {
     name: "",
     cpf: "",
-    room: "",
+    room: "1",
     registration_number: "",
 };
 
 function AddEditStudent() {
     const { id } = useParams();
+    const { createStudent, updateStudent, showStudent } = useStudents()
     const navigate = useNavigate();
-    const { createStudent } = useStudents()
     const [editMode, setEditMode] = useState(false);
     const [formValue, setFormValue] = useState(initialState);
     const { name, cpf, room, registration_number } = formValue;
@@ -21,20 +21,23 @@ function AddEditStudent() {
     useEffect(() => {
         if (id) {
             setEditMode(true);
-            // setFormValue({ ...selectedStudent });
+            const selectedStudent = showStudent(id)
+            setFormValue({ ...selectedStudent });
         }
-    }, [id]);
+    }, [id, showStudent]);
 
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async  (event) => {
         event.preventDefault();
+        console.log('aq')
         if (name && cpf && room && registration_number && editMode) {
-            // updateUserStart({ id, formValue })
+            await updateStudent({ id, formValue })
             setEditMode(false);
             setTimeout(() => navigate("/"), 500);
             return;
         };
-        createStudent(formValue);
+        console.log('formValue', formValue)
+       await createStudent(formValue);
         setTimeout(() => navigate("/"), 500);
     };
 
@@ -57,7 +60,7 @@ function AddEditStudent() {
                     <input type='cpf' name='cpf' title='CPF' placeholder='CPF' required value={cpf || ""} onChange={onInputChange} />
                     <input type='text' name='registration_number' title='Matrícula' placeholder='Número de Matrícula' required value={registration_number || ""} onChange={onInputChange} />
                     <input type='text' name='room' title='Sala' placeholder='Sala' required value={room || ""} onChange={onInputChange} />
-                    <button type='submit' className='addStudentButton' style={{ marginTop: 15 }}>{editMode ? "Editar" : "Criar"}</button>
+                    <button type='submit'  className='addStudentButton' style={{ marginTop: 15 }}>{editMode ? "Editar" : "Criar"}</button>
                 </form>
             </div>
         </div>
