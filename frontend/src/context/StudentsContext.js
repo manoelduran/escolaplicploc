@@ -35,8 +35,8 @@ function StudentsProvider({ children }) {
 
 
 
-    async function showStudent(room) {
-        const selectedStudent = students.find(student => student.room === room)
+    async function showStudent(id) {
+        const selectedStudent = students.find(student => student.id === id)
         setStudent(selectedStudent);
     }
 

@@ -1,12 +1,5 @@
 import React, { useState, useContext } from "react";
 
-const initialState = {
-    name: "",
-    cpf: "",
-    academic_title: "",
-    subject: ""
-};
-
 
 
 export const TeachersContext = React.createContext({});
@@ -39,8 +32,8 @@ function TeachersProvider({ children }) {
 
 
 
-    async function showTeacher(subject) {
-      const selectedTeacher = teachers.find(Teacher => Teacher.subject === subject)
+    async function showTeacher(id) {
+      const selectedTeacher = teachers.find(Teacher => Teacher.subject === id)
       setTeacher(selectedTeacher);
     }
 

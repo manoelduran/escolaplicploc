@@ -1,6 +1,6 @@
 
 
-div.teacherCardContainer {
+div.studentCardContainer {
     width: fit-content;
     height: 200px;
     background: lightgreen;
@@ -10,7 +10,7 @@ div.teacherCardContainer {
     align-items: center;
     justify-content: space-between;
     border-radius: 10px;
-    text-align: center;
+    text-align: start;
 }
 
  button.showButton{
@@ -26,9 +26,6 @@ div.teacherCardContainer {
     background: lightblue;
  }
 
- div.teacherButtonContainer{
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+ div.studentCardContainer + div.studentCardContainer {
+    margin: 20px;
  }

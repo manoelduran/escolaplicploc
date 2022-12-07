@@ -7,14 +7,14 @@ import { TeachersProvider } from './context/TeachersContext';
 function App() {
   return (
     <>
-       <Header/>
-   <TeachersProvider>
-   <StudentsProvider>
-       <Routes>
-        <Router />
-      </Routes>
-   </StudentsProvider>
-   </TeachersProvider>
+      <TeachersProvider>
+        <StudentsProvider>
+          <Header />
+          <Routes>
+            <Router />
+          </Routes>
+        </StudentsProvider>
+      </TeachersProvider>
     </>
   );
 }
