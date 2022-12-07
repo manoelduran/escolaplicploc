@@ -1,0 +1,49 @@
+div.container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+}
+
+div.schoolContainer {
+    width: 100%;
+    padding: 30px;
+}
+
+h4.schoolName {
+    padding-top: 15px;
+}
+
+h4.schoolCNPJ {
+    padding-top: 15px;
+}
+
+h4.schoolAddress {
+    padding-top: 15px;
+}
+
+div.buttonsContainer {
+width: 100%;
+height: 100%;
+display: flex;
+align-items: center;
+justify-content: center;
+
+}
+button + button {
+    margin-left: 20px;
+}
+button.headerButton{
+    background: none;
+    border: 1px solid;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: 0.4s;
+ }
+
+.headerButton:hover {
+    background: lightgreen;
+ }

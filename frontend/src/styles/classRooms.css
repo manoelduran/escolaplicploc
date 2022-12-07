@@ -1,0 +1,43 @@
+
+
+div.classRoomsContainer {
+    width: 100%;
+    height: 100%;
+    padding: 50px 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+div.classRoomInfo {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+h1.classRoomTitle {
+
+}
+
+button.classRoomButton{
+    background: none;
+    border: 1px solid;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: 0.4s;
+ }
+
+.classRoomButton:hover {
+    background: lightgreen;
+ }
+
+ div.mapContainer {
+    width: 100%;
+    height: 100%;
+    margin-top: 50px;
+    display: flex;
+ }
+
+ 
