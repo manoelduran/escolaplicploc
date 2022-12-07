@@ -1,0 +1,18 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/infrastructure/server.js",
+  "scripts": {
+    "start": "node src/infrastructure/server.js",
+    "db:run": "node src/infrastructure/database/generate.js"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "pg": "^8.8.0"
+  }
+}
