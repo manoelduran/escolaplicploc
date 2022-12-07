@@ -45,6 +45,18 @@ async function generate() {
           FOREIGN KEY ("classroom") REFERENCES classrooms("id")
         `,
       },
+      {
+        name: "reportcards",
+        columns: `
+          "id" SERIAL PRIMARY KEY,
+          "student_id" INTEGER,
+          FOREIGN KEY ("student_id") REFERENCES students("id"),
+          "classroom_id" INTEGER,
+          FOREIGN KEY ("classroom_id") REFERENCES classrooms("id"),
+          "finalGrade" INTEGER,
+          "approval" BOOLEAN
+        `,
+      }
     ];
 
     const mainDb = new pg.Client({
