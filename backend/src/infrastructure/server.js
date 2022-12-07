@@ -1,5 +1,4 @@
 import express from "express";
-import { client } from "./database/index.js";
 import { routes } from "./routes.js";
 
 class Server {
@@ -9,8 +8,6 @@ class Server {
   }
 
   async init() {
-    await client.connect();
-
     this.middlewares();
     this.routes();
   }

@@ -3,34 +3,15 @@ import { databaseConfig } from "../../config.js";
 
 async function generate() {
   try {
-    const timestampQuery = (table, column) => `
-      ALTER TABLE ${table} ADD COLUMN "${column}" TIMESTAMP NOT NULL DEFAULT now();
-    `;
-
-    const generateTimestampsQuery = (table) =>
-      `${timestampQuery(table, "created_at")}
-       ${timestampQuery(table, "updated_at")}`;
-
     const tables = [
       {
         name: "schools",
         columns: `
           "id" SERIAL PRIMARY KEY,
           "name" VARCHAR(255),
-          "CNPJ" VARCHAR(14),
+          "cnpj" VARCHAR(14),
           "logo" VARCHAR(255),
           "address" VARCHAR(255)
-        `,
-      },
-      {
-        name: "students",
-        columns: `
-          "id" SERIAL PRIMARY KEY,
-          "name" VARCHAR(255),
-          "CPF" VARCHAR(11),
-          "registrationNumber" VARCHAR(255),
-          "classroom" INTEGER,
-          FOREIGN KEY ("classroom") REFERENCES classrooms("id")
         `,
       },
       {
@@ -54,25 +35,45 @@ async function generate() {
           FOREIGN KEY ("teacher_id") REFERENCES teachers("id")
         `,
       },
+      {
+        name: "students",
+        columns: `
+          "id" SERIAL PRIMARY KEY,
+          "name" VARCHAR(255),
+          "CPF" VARCHAR(11),
+          "registrationNumber" VARCHAR(255),
+          "classroom" INTEGER,
+          FOREIGN KEY ("classroom") REFERENCES classrooms("id")
+        `,
+      },
     ];
 
-    const mainDb = new pg.Client(databaseConfig);
+    const mainDb = new pg.Client({
+      ...databaseConfig,
+      database: null,
+    });
+
+    await mainDb.connect();
 
     await mainDb.query(`DROP DATABASE IF EXISTS epp;`);
     await mainDb.query(`CREATE DATABASE epp;`);
 
     await mainDb.end();
 
-    const client = new pg.Client({
-      ...databaseConfig,
-      database: "epp",
-    });
+    const client = new pg.Client(databaseConfig);
+
+    await client.connect();
 
     await Promise.all(
       tables.map((table) => {
-        const query = `CREATE TABLE IF NOT EXISTS ${table.name} (${table.columns});`;
-        console.log(query);
-        return client.query(query);
+        return new Promise((resolve, reject) => {
+          const query = `CREATE TABLE IF NOT EXISTS ${table.name} (${table.columns});`;
+          return client.query(query, (err, result) => {
+            if (err) return reject(err);
+            console.log(query);
+            resolve();
+          });
+        });
       })
     );
 
