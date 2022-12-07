@@ -2,13 +2,11 @@ import { School } from "../models/School.js";
 import { SchoolRepository } from "../repositories/SchoolRepository.js";
 
 export class SchoolController {
-  constructor() {
-    this.schoolRepository = new SchoolRepository();
-  }
-
   async create(req, res) {
     try {
       const data = req.body;
+
+      const schoolRepository = new SchoolRepository();
 
       if (!data || !data.name || !data.CNPJ || !data.logo || !data.address) {
         return res.status(400).json({
@@ -18,7 +16,7 @@ export class SchoolController {
 
       const school = new School(data);
 
-      const createdSchool = await this.schoolRepository.create(school);
+      const createdSchool = await schoolRepository.create(school);
       return res.status(201).send(createdSchool);
     } catch (error) {
       console.log(error);
@@ -33,18 +31,22 @@ export class SchoolController {
     }
 
     try {
-      const school = await this.schoolRepository.getById(id);
+      const schoolRepository = new SchoolRepository();
+      const school = await schoolRepository.getById(id);
       return res.status(200).json(school);
     } catch (error) {
+      console.log(error);
       return res.status(500).send({ error: "Erro ao criar escolas" });
     }
   }
 
   async listSchools(req, res) {
     try {
-      const schools = await this.schoolRepository.list();
+      const schoolRepository = new SchoolRepository();
+      const schools = await schoolRepository.getAll();
       return res.send(schools);
     } catch (error) {
+      console.log(error);
       return res.status(500).send({ error: "Erro ao listar escolas" });
     }
   }
@@ -57,9 +59,11 @@ export class SchoolController {
     }
 
     try {
-      const school = await this.schoolRepository.delete(id);
+      const schoolRepository = new SchoolRepository();
+      const school = await schoolRepository.delete(id);
       return res.send(school);
     } catch (error) {
+      console.log(error);
       return res.status(500).send({ error: "Erro ao deletar escola" });
     }
   }

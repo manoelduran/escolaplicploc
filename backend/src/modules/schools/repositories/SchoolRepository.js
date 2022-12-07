@@ -1,18 +1,31 @@
-import { client } from "../../../infrastructure/database/index.js";
+import pg from "pg";
+import { databaseConfig } from "../../../config.js";
 
 export class SchoolRepository {
-  constructor() {}
+  constructor() {
+    this.pool = new pg.Pool(databaseConfig);
+    this.pool.connect();
+  }
 
   async create(school) {
     const { name, CNPJ, logo, address } = school;
     const query =
-      "INSERT INTO schools (name, CNPJ, logo, address) VALUES ($1, $2, $3, $4) RETURNING *";
+      "INSERT INTO schools (name, cnpj, logo, address) VALUES ($1, $2, $3, $4) RETURNING *";
 
     const values = [name, CNPJ, logo, address];
 
     try {
-      const result = await client.query(query, values);
+      const result = await this.pool.query(query, values);
       return result.rows[0];
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getAll() {
+    try {
+      const result = await this.pool.query("SELECT * FROM schools");
+      return result.rows;
     } catch (error) {
       throw error;
     }
@@ -23,7 +36,7 @@ export class SchoolRepository {
     const values = [id];
 
     try {
-      const result = await client.query(query, values);
+      const result = await this.pool.query(query, values);
       return result.rows[0];
     } catch (error) {
       throw error;
@@ -37,7 +50,7 @@ export class SchoolRepository {
     const values = [name, CNPJ, logo, address, id];
 
     try {
-      const result = await client.query(query, values);
+      const result = await this.pool.query(query, values);
       return result.rows[0];
     } catch (error) {
       throw error;
@@ -49,7 +62,7 @@ export class SchoolRepository {
     const values = [id];
 
     try {
-      const result = await client.query(query, values);
+      const result = await this.pool.query(query, values);
       return result.rows[0];
     } catch (error) {
       throw error;

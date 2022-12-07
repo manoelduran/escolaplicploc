@@ -1,11 +1,11 @@
 import { BaseModel } from "../../../shared/BaseModel.js";
 
 export class School extends BaseModel {
-  constructor(name, CNPJ, logo, address, id) {
-    super(id);
-    this.name = name;
-    this.CNPJ = CNPJ;
-    this.logo = logo;
-    this.address = address;
+  constructor(props) {
+    super(props.id);
+    this.name = props.name;
+    this.CNPJ = props.CNPJ;
+    this.logo = props.logo;
+    this.address = props.address;
   }
 }
