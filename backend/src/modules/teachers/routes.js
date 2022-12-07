@@ -7,7 +7,7 @@ const teacherController = new TeacherController();
 
 teacherRoutes.post("/", teacherController.create);
 teacherRoutes.get("/:id", teacherController.show);
-teacherRoutes.get("/", teacherController.listSchools);
-teacherRoutes.delete("/:id", teacherController.deleteSchool);
+teacherRoutes.get("/", teacherController.listTeachers);
+teacherRoutes.delete("/:id", teacherController.deleteTeacher);
 
 export { teacherRoutes };

@@ -20,7 +20,7 @@ async function generate() {
           "id" SERIAL PRIMARY KEY,
           "name" VARCHAR(255),
           "cpf" VARCHAR(11),
-          "academicTitle" VARCHAR(255),
+          "academictitle" VARCHAR(255),
           "discipline" VARCHAR(255)
         `,
       },

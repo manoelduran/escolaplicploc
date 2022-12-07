@@ -10,7 +10,7 @@ export class TeacherRepository {
   async create(teacher) {
     const { name, CPF, academicTitle, discipline} = teacher;
     const query =
-      "INSERT INTO teachers (name, cpf, academicTitle, discipline) VALUES ($1, $2, $3, $4) RETURNING *";
+      "INSERT INTO teachers (name, cpf, academictitle, discipline) VALUES ($1, $2, $3, $4) RETURNING *";
 
     const values = [name, CPF, academicTitle, discipline];
 
@@ -46,7 +46,7 @@ export class TeacherRepository {
   async update(teacher) {
     const { name, CPF, academicTitle, discipline } = teacher;
     const query =
-      "UPDATE teachers SET name = $1, cpf = $2, academicTitle = $3, discipline = $4 WHERE id = $5 RETURNING * ";
+      "UPDATE teachers SET name = $1, cpf = $2, academictitle = $3, discipline = $4 WHERE id = $5 RETURNING * ";
     const values = [name, CPF, academicTitle, discipline, id];
 
     try {

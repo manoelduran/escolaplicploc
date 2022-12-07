@@ -5,7 +5,6 @@ export class TeacherController {
   async create(req, res) {
     try {
       const data = req.body;
-
       const teacherRepository = new TeacherRepository();
 
       if (!data || !data.name || !data.CPF || !data.academicTitle || !data.discipline) {
