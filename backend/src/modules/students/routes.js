@@ -9,5 +9,6 @@ studentsRoutes.post("/", studentController.create);
 studentsRoutes.get("/:id", studentController.show);
 studentsRoutes.get("/", studentController.listStudents);
 studentsRoutes.delete("/:id", studentController.deleteStudent);
+studentsRoutes.put("/:id", studentController.updateStudent);
 
 export { studentsRoutes };

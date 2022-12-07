@@ -57,7 +57,6 @@ export class TeacherController {
     try {
       const data = req.body;
       const teacherRepository = new TeacherRepository();
-      console.log('data', data)
       if (!data || !data.name || !data.CPF || !data.academicTitle || !data.discipline) {
         return res.status(400).json({
           message: "name, CPF, academicTitle e discipline são obrigatórios",
@@ -65,12 +64,13 @@ export class TeacherController {
       }
 
       const teacher = await teacherRepository.getById(id);
+      
       if(!teacher) {
         return res.status(400).send({
           message: "Professor não encontrado",
         });
       }
-      const updatedTeacher = await teacherRepository.update(teacher);
+      const updatedTeacher = await teacherRepository.update({...data, id: teacher.id});
       return res.status(200).send(updatedTeacher);
     } catch (error) {
       console.log(error);

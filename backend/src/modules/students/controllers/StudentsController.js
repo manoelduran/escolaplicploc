@@ -50,6 +50,35 @@ export class StudentController {
     }
   }
 
+  async updateStudent(req, res) {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).json({ message: "ID é obrigatório" });
+    }
+    try {
+      const data = req.body;
+      const studentRepository = new StudentRepository();
+      if (!data || !data.name || !data.CPF || !data.academicTitle || !data.discipline) {
+        return res.status(400).json({
+          message: "name, CPF, academicTitle e discipline são obrigatórios",
+        });
+      }
+
+      const student = await studentRepository.getById(id);
+      
+      if(!student) {
+        return res.status(400).send({
+          message: "Estudante não encontrado",
+        });
+      }
+      const updatedStudent = await studentRepository.update({...data, id: student.id});
+      return res.status(200).send(updatedStudent);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({ error: "Erro ao atualizar professor" });
+    }
+  }
+
   async deleteStudent(req, res) {
     const id = req.params.id;
 
