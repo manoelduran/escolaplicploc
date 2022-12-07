@@ -15,7 +15,7 @@ function Home() {
             <div className='buttonsContainer'>
                 <button className='headerButton' onClick={() => navigate(`/classRooms`)}>Visualizar turmas</button>
                 <button className='headerButton' onClick={() => navigate(`/addTeacher`)}>Criar Professor</button>
-                <button className='headerButton' onClick={() => navigate(`/AddGrade`)}>Criar Aluno</button>
+                <button className='headerButton' onClick={() => navigate(`/AddStudent`)}>Criar Aluno</button>
             </div>
         </div>
     );
