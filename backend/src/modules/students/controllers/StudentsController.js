@@ -55,13 +55,14 @@ export class StudentController {
     if (!id) {
       return res.status(400).json({ message: "ID é obrigatório" });
     }
+
     try {
       const data = req.body;
-      const studentRepository = new StudentRepository();
-      if (!data || !data.name || !data.CPF || !data.academicTitle || !data.discipline) {
-        return res.status(400).json({
-          message: "name, CPF, academicTitle e discipline são obrigatórios",
-        });
+      const studentRepository = new StudentsRepository();
+      if (!data.name || !data.CPF || !data.enrollment || !data.classroom) {
+        return res
+          .status(400)
+          .send("Nome, CPF, matrícula e sala são obrigatórios");
       }
 
       const student = await studentRepository.getById(id);
