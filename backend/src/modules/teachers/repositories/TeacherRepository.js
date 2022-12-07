@@ -44,11 +44,12 @@ export class TeacherRepository {
   }
 
   async update(teacher) {
+    console.log('teacher', teacher)
     const { name, CPF, academicTitle, discipline } = teacher;
     const query =
       "UPDATE teachers SET name = $1, cpf = $2, academictitle = $3, discipline = $4 WHERE id = $5 RETURNING * ";
     const values = [name, CPF, academicTitle, discipline, id];
-
+    console.log('values', values)
     try {
       const result = await this.pool.query(query, values);
       return result.rows[0];

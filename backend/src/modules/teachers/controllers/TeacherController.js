@@ -49,7 +49,34 @@ export class TeacherController {
       return res.status(500).send({ error: "Erro ao listar professores" });
     }
   }
+  async updateTeacher(req, res) {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).json({ message: "ID é obrigatório" });
+    }
+    try {
+      const data = req.body;
+      const teacherRepository = new TeacherRepository();
+      console.log('data', data)
+      if (!data || !data.name || !data.CPF || !data.academicTitle || !data.discipline) {
+        return res.status(400).json({
+          message: "name, CPF, academicTitle e discipline são obrigatórios",
+        });
+      }
 
+      const teacher = await teacherRepository.getById(id);
+      if(!teacher) {
+        return res.status(400).send({
+          message: "Professor não encontrado",
+        });
+      }
+      const updatedTeacher = await teacherRepository.update(teacher);
+      return res.status(200).send(updatedTeacher);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send({ error: "Erro ao atualizar professor" });
+    }
+  }
   async deleteTeacher(req, res) {
     const id = req.params.id;
 
