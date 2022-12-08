@@ -7,7 +7,7 @@ const reportCardsRoutes = Router();
 
 reportCardsRoutes.post("/", reportCardController.create);
 reportCardsRoutes.get("/:id", reportCardController.show);
-reportCardsRoutes.get("/", reportCardController.listSRecordCards);
+reportCardsRoutes.get("/", reportCardController.listRecordCards);
 reportCardsRoutes.delete("/:id", reportCardController.deleteRecordCard);
 reportCardsRoutes.put("/:id", reportCardController.updateRecordCard);
 

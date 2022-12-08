@@ -1,27 +1,49 @@
+import { ClassRoomsRepository } from "../../classrooms/repositories/ClassRoomsRepository.js";
+import { StudentsRepository } from "../../students/repositories/StudentsRepository.js";
 import { ReportCard } from "../models/ReportCard.js";
 import { ReportCardsRepository } from "../repositories/ReportCardsRepository.js";
 
 export class ReportCardController {
-  constructor() {
-    this.reportCardsRepository = new ReportCardsRepository();
-  }
-
   async create(req, res) {
-    const { data } = req.body;
+    const data = req.body;
 
-    if (!data.student || !data.classroom || !data.finalGrade || !data.approval) {
-      return res
-        .status(400)
-        .send("Estudante, turma, nota final e aprovado são obrigatórios");
+    if (!data.student_id || !data.finalGrade) {
+      return res.status(400).json({
+        message: "student_id, classroom_id, finalGrade",
+      });
     }
 
-    const reportCard = new ReportCard(data);
-
     try {
-      const reportCardCreated = await this.reportCardsRepository.create(reportCard);
+      const studentsRepository = new StudentsRepository();
 
-      return res.status(201).json(reportCardCreated);
+      const studentExists = await studentsRepository.getById(data.student_id);
+
+      if (!studentExists) {
+        return res.status(400).send({ error: "student não encontrado" });
+      }
+
+      if (!studentExists.classroom) {
+        return res
+          .status(400)
+          .send({ error: "student não esta matriculado em nenhuma classe" });
+      }
+
+      const reportCard = new ReportCard({
+        finalGrade: data.finalGrade,
+        student: studentExists,
+        classroom: studentExists.classroom,
+      });
+
+      const reportCardsRepository = new ReportCardsRepository();
+      const reportCardCreated = await reportCardsRepository.create(reportCard);
+
+      return res.status(201).json({
+        ...reportCardCreated,
+        student: studentExists,
+        classroom: studentExists.classroom,
+      });
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
@@ -29,24 +51,29 @@ export class ReportCardController {
   async show(req, res) {
     const id = req.params.id;
     if (!id) {
-      throw new Error("ID é obrigatório");
+      return res.status(400).json({
+        message: "ID é obrigatório",
+      });
     }
 
     try {
-      const reportCard = await this.reportCardsRepository.getById(id);
+      const reportCardsRepository = new ReportCardsRepository();
+      const reportCard = await reportCardsRepository.getById(id);
 
-      return res.status(200).json(reportCard);
+      return res.json(reportCard);
     } catch (error) {
       throw error;
     }
   }
 
-  async listSRecordCards(req, res) {
+  async listRecordCards(req, res) {
     try {
-      const reportCards = await this.reportCardsRepository.list();
-      return res.send(reportCards);
+      const reportCardsRepository = new ReportCardsRepository();
+      const reportCards = await reportCardsRepository.getAll();
+      return res.json(reportCards);
     } catch (error) {
-      return res.status(500).send({ error: "Erro ao listar boletins" });
+      console.log(error);
+      return res.status(500).send({ error: "Erro ao listar reportcards" });
     }
   }
 
@@ -59,24 +86,51 @@ export class ReportCardController {
     try {
       const data = req.body;
       const reportCardsRepository = new ReportCardsRepository();
-      if (!data.student || !data.classroom || !data.finalGrade || !data.approval) {
-        return res
-          .status(400)
-          .send("Estudante, turma, nota final e aprovado são obrigatórios");
-      }
+      const studentsRepository = new StudentsRepository();
+      const classRoomRepository = new ClassRoomsRepository();
 
-      const reportCards = await reportCardsRepository.getById(id);
-      
-      if(!reportCards) {
+      const reportCardExists = await reportCardsRepository.getById(id);
+
+      if (!reportCardExists) {
         return res.status(400).send({
-          message: "Boletim não encontrado",
+          message: "reportcard não encontrado",
         });
       }
-      const updatedReportCard = await reportCardsRepository.update({...data, id: reportCards.id});
+
+      if (data.student_id) {
+        const student = await studentsRepository.getById(id);
+
+        if (!student) {
+          return res.status(400).send({
+            message: "student não encontrado",
+          });
+        }
+
+        reportCardExists.student = student;
+      }
+
+      if (data.classroom_id) {
+        const classroom = await classRoomRepository.getById(id);
+
+        if (!classroom) {
+          return res.status(400).send({
+            message: "classroom não encontrada",
+          });
+        }
+
+        reportCardExists.classroom = classroom;
+      }
+
+      const reportCard = new ReportCard({
+        ...reportCardExists,
+        finalGrade: data.finalGrade || reportCardExists.finalGrade,
+      });
+
+      const updatedReportCard = await reportCardsRepository.update(reportCard);
       return res.status(200).send(updatedReportCard);
     } catch (error) {
       console.log(error);
-      return res.status(500).send({ error: "Erro ao atualizar boletim" });
+      return res.status(500).send({ message: "Erro ao atualizar boletim" });
     }
   }
 
@@ -84,14 +138,25 @@ export class ReportCardController {
     const id = req.params.id;
 
     if (!id) {
-      return res.status(400).json({ error: "ID é obrigatório" });
+      return res.status(400).json({ message: "ID é obrigatório" });
     }
 
     try {
-      const reportCard = await this.reportCardsRepository.delete(id);
+      const reportCardsRepository = new ReportCardsRepository();
+
+      const reportCardExists = await reportCardsRepository.getById(id);
+
+      if (!reportCardExists) {
+        return res.status(400).send({
+          message: "reportcard não encontrado",
+        });
+      }
+
+      await reportCardsRepository.delete(id);
+
       return res.status(200).json(reportCard);
     } catch (error) {
-      return res.status(500).json({ error: "Erro ao deletar boletim" });
+      return res.status(500).json({ message: "Erro ao deletar boletim" });
     }
   }
 }
