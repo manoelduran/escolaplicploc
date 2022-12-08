@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/infrastructure/server.js",
     "db:run": "node src/infrastructure/database/generate.js",
-    "seeds": "node src/infrastructure/seeds.js"
+    "db:seed": "node src/infrastructure/seeds.js"
   },
   "type": "module",
   "keywords": [],

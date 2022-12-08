@@ -19,11 +19,7 @@ class Server {
 
   middlewares() {
     this.app.use(express.json());
-    this.app.use(
-      cors({
-        origin: "*",
-      })
-    );
+    this.app.use(cors());
   }
 
   listen() {
