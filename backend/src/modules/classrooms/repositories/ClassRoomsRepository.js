@@ -41,8 +41,8 @@ export class ClassRoomsRepository {
                 'discipline', tc.discipline
         ) as teacher
         FROM classrooms cr
-        INNER JOIN (SELECT * FROM students) st ON st.classroom_id = cr.id
-        INNER JOIN teachers tc ON (tc.id = cr.teacher_id)
+        LEFT JOIN (SELECT * FROM students) st ON st.classroom_id = cr.id
+        LEFT JOIN teachers tc ON (tc.id = cr.teacher_id)
         GROUP BY tc.id, cr.id
       `;
 

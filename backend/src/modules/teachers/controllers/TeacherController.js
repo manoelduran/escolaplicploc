@@ -7,7 +7,6 @@ export class TeacherController {
   async create(req, res) {
     try {
       const data = req.body;
-      console.log("data", data);
       const teacherRepository = new TeacherRepository();
       const classRoomRepository = new ClassRoomsRepository();
 
@@ -64,7 +63,8 @@ export class TeacherController {
     try {
       const teacherRepository = new TeacherRepository();
       const teachers = await teacherRepository.getAll();
-      return res.send(teachers);
+
+      return res.json(teachers);
     } catch (error) {
       console.log(error);
       return res.status(500).send({ error: "Erro ao listar professores" });
