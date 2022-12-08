@@ -1,7 +1,7 @@
 
 
 div.cardContainer {
-    width: 100%;
+    width: fit-content;
     height: 200px;
     background: lightgreen;
     display: flex;

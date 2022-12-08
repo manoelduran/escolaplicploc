@@ -1,4 +1,5 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { fetchAPI } from "../service/api";
 
 
 
@@ -6,11 +7,12 @@ export const TeachersContext = React.createContext({});
 
 function TeachersProvider({ children }) {
     const [teachers, setTeachers] = useState([]);
-    const [teacher, setTeacher] = useState({});
+    const [teacher, setTeacher] = useState({})
 
     async function fetchTeachers() {
-        const TeachersCollection = await fetch();
-        setTeachers(TeachersCollection);
+        const TeachersCollection = await fetchAPI("/teachers", 'get')
+        const teachersData = await TeachersCollection.json()
+        setTeachers(teachersData);
     }
 
     async function createTeacher(data) {
@@ -21,7 +23,7 @@ function TeachersProvider({ children }) {
 
     async function updateTeacher(id, data) {
         const selectedTeacher = teachers.filter(Teacher => Teacher.id === id)
-       const updatedList = teachers.push(...selectedTeacher, data);
+        const updatedList = teachers.push(...selectedTeacher, data);
         setTeachers(updatedList)
     }
 
@@ -30,27 +32,31 @@ function TeachersProvider({ children }) {
         setTeachers(removedTeacher);
     }
 
-
-
-    async function showTeacher(id) {
-      const selectedTeacher = teachers.find(Teacher => Teacher.subject === id)
-      setTeacher(selectedTeacher);
+    const showTeacher = async (teacher_id) => {
+        console.log('teacher_id', teacher_id)
+        const selectedTeacher = await fetchAPI(`/teachers/${teacher_id}`, 'get')
+        const data = await selectedTeacher.json()
+        console.log('teachersData', data)
+        setTeacher(data)
     }
 
-   return (
-    <TeachersContext.Provider value={{
-        teachers,
-        teacher,
-        createTeacher,
-        updateTeacher,
-        deleteTeacher,
-        fetchTeachers,
-        showTeacher
-    }
-    }>
-        {children}
-    </TeachersContext.Provider >
-   )
+ useEffect(() => {
+    fetchTeachers()
+ }, [])
+    return (
+        <TeachersContext.Provider value={{
+            teachers,
+            teacher,
+            createTeacher,
+            updateTeacher,
+            deleteTeacher,
+            fetchTeachers,
+            showTeacher
+        }
+        }>
+            {children}
+        </TeachersContext.Provider >
+    )
 
 }
 

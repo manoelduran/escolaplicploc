@@ -32,10 +32,11 @@ export class TeacherController {
     try {
       const teacherRepository = new TeacherRepository();
       const teacher = await teacherRepository.getById(id);
+      console.log('teacher', teacher)
       return res.status(200).json(teacher);
     } catch (error) {
       console.log(error);
-      return res.status(500).send({ error: "Erro ao criar professor" });
+      return res.status(500).send({ error: "Erro ao encontrar o paciente" });
     }
   }
 

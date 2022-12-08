@@ -1,16 +1,22 @@
+import { useEffect } from 'react';
+import { useTeachers } from '../../context/TeachersContext';
 import './roomCard.css';
 
 
-function RoomCard({room, onClick}) {
+function RoomCard({ classRoom, onClick }) {
+    const { teacher, showTeacher } = useTeachers();
+    
+    useEffect(() => {
+        showTeacher(classRoom.teacher_id)
+    }, [])
     return (
         <div className="cardContainer">
-            <h1>Matéria: {room.subject}</h1>
-            <h4> Módulo: {room.room}</h4>
-            <h4>Professor: {room.teacher.name}</h4>
-            <span>Formação: {room.teacher.academic_title}</span>
+            <h1>Matéria: {classRoom?.subject}</h1>
+            <h4>Professor: {teacher?.name}</h4>
+            <span>Formação: {teacher?.academictitle}</span>
             <button className="enterButton" onClick={onClick}>Entrar</button>
         </div>
     );
 };
 
-export {RoomCard};
+export { RoomCard };

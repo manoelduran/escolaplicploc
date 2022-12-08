@@ -5,7 +5,8 @@
   "main": "src/infrastructure/server.js",
   "scripts": {
     "start": "node src/infrastructure/server.js",
-    "db:run": "node src/infrastructure/database/generate.js"
+    "db:run": "node src/infrastructure/database/generate.js",
+    "seeds": "node src/infrastructure/seeds.js"
   },
   "type": "module",
   "keywords": [],

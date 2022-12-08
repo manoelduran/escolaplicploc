@@ -10,16 +10,11 @@ div.roomContainer {
 div.teacherContainer{
     width: 100%;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
 }
 
-div.buttonsDiv{
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-}
+
 
 div.studentsContainer {
     width: 100% ;
