@@ -30,7 +30,7 @@ async function generate() {
         columns: `
           "id" SERIAL PRIMARY KEY,
           "teacher_id" INTEGER,
-          "students" INTEGER[] NOT NULL,
+          "students" INTEGER[] NULL,
           "subject" VARCHAR(255),
           FOREIGN KEY ("teacher_id") REFERENCES teachers("id")
         `,
@@ -41,9 +41,9 @@ async function generate() {
           "id" SERIAL PRIMARY KEY,
           "name" VARCHAR(255),
           "cpf" VARCHAR(11),
-          "registrationNumber" VARCHAR(255),
-          "classroom" INTEGER,
-          FOREIGN KEY ("classroom") REFERENCES classrooms("id")
+          "registrationnumber" VARCHAR(255),
+          "classroom_id" INTEGER,
+          FOREIGN KEY ("classroom_id") REFERENCES classrooms("id")
         `,
       },
       {
@@ -57,7 +57,7 @@ async function generate() {
           "finalGrade" INTEGER,
           "approval" BOOLEAN
         `,
-      }
+      },
     ];
 
     const mainDb = new pg.Client({
