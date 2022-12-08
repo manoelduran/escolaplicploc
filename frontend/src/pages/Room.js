@@ -14,7 +14,7 @@ function Room() {
     const [teacher, setTeacher] = useState({})
     const { deleteStudent, showStudent, students } = useStudents()
     const fetchTeacher = async (id) => {
-        const response = await fetchAPI(`/teachers/${Number(1)}`, 'GET')
+        const response = await fetchAPI(`/teachers/${Number(id)}`, 'GET')
         const teachersData = await response.json()
         console.log('selectedTeacher', teachersData)
         setTeacher(teachersData)

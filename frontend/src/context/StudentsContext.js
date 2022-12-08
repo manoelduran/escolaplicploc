@@ -8,7 +8,6 @@ export const StudentsContext = React.createContext({});
 function StudentsProvider({ children }) {
     const [students, setStudents] = useState([]);
     const [student, setStudent] = useState({});
-    console.log('students', students)
 
     async function fetchStudents() {
         const studentsCollection = await fetch();
