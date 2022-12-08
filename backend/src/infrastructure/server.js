@@ -1,4 +1,5 @@
 import express from "express";
+import { cors } from "../middlewares/cors.js";
 import { routes } from "./routes.js";
 
 class Server {
@@ -18,6 +19,11 @@ class Server {
 
   middlewares() {
     this.app.use(express.json());
+    this.app.use(
+      cors({
+        origin: "*",
+      })
+    );
   }
 
   listen() {
