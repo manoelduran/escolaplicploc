@@ -23,6 +23,7 @@ export class ClassRoomsController {
       const classroom = await classroomRepository.getAll();
       return res.send(classroom);
     } catch (error) {
+      console.log(error);
       return res.status(500).send({ error: "Erro ao listar classes" });
     }
   }

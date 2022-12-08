@@ -24,7 +24,30 @@ export class ClassRoomsRepository {
 
   async getAll() {
     try {
-      const result = await this.pool.query("SELECT * FROM classrooms");
+      const query = `
+        SELECT 
+        cr.id, cr.subject,
+        json_agg(json_build_object(
+             'id', st.id,
+             'name', st.name,
+             'CPF', st.cpf,
+             'registrationNumber', st.registrationnumber,
+             'classroom_id', st.classroom_id
+         )) as students,
+        json_build_object(
+                'id', tc.id,
+                'name', tc.name,
+                'academicTitle', tc.academicTitle,
+                'discipline', tc.discipline
+        ) as teacher
+        FROM classrooms cr
+        INNER JOIN (SELECT * FROM students) st ON st.classroom_id = cr.id
+        INNER JOIN teachers tc ON (tc.id = cr.teacher_id)
+        GROUP BY tc.id, cr.id
+      `;
+
+      const result = await this.pool.query(query);
+
       return result.rows;
     } catch (error) {
       throw error;
