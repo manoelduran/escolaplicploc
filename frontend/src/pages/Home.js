@@ -1,9 +1,20 @@
 import '../styles/home.css'
 import { useNavigate } from 'react-router-dom';
+import { fetchAPI } from '../service/api';
+import { useEffect } from 'react';
 
 
 function Home() {
     const navigate = useNavigate()
+    const fetchSchool = async () => {
+        const schoolData =  await fetchAPI("/schools")
+        console.log('schoolData', schoolData)
+        return schoolData
+    }
+ 
+    useEffect(() => {
+        fetchSchool()
+    }, [])
     return (
         <div className='container'>
             <div className='schoolContainer'>
