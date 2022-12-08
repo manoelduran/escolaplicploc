@@ -1,43 +1,6 @@
-import { ClassRoom } from "../models/ClassRoom.js";
 import { ClassRoomsRepository } from "../repositories/ClassRoomsRepository.js";
-import { TeacherRepository } from "../../teachers/repositories/TeacherRepository.js";
 
 export class ClassRoomsController {
-  async create(req, res) {
-    const data = req.body;
-
-    if (!data || !data.teacher_id || !data.subject) {
-      return res.status(400).json({
-        message: "teacher_id and subject são obrigatórios",
-      });
-    }
-
-    try {
-      const classRoomRepository = new ClassRoomsRepository();
-
-      const teachersRepository = new TeacherRepository();
-      const teacherExists = await teachersRepository.getById(data.teacher_id);
-
-      if (!teacherExists) {
-        return res.status(404).json({
-          message: "teacher não encontrado",
-        });
-      }
-
-      const classroom = new ClassRoom({
-        subject: data.subject,
-        teacher: teacherExists,
-      });
-
-      const classRoomCreated = await classRoomRepository.create(classroom);
-
-      return res.status(201).json(classRoomCreated);
-    } catch (error) {
-      console.log(error);
-      return res.status(500).send({ error: "Erro ao criar classroom" });
-    }
-  }
-
   async show(req, res) {
     const id = req.params.id;
     if (!id) {
@@ -46,11 +9,11 @@ export class ClassRoomsController {
 
     try {
       const classroomRepository = new ClassRoomsRepository();
-      const student = await classroomRepository.getById(id);
+      const classroom = await classroomRepository.getById(id);
 
-      return res.status(200).json(student);
+      return res.status(200).json(classroom);
     } catch (error) {
-      throw error;
+      return res.status(500).send({ error: "Erro ao buscar classe" });
     }
   }
 
@@ -60,7 +23,7 @@ export class ClassRoomsController {
       const classroom = await classroomRepository.getAll();
       return res.send(classroom);
     } catch (error) {
-      return res.status(500).send({ error: "Erro ao listar alunos" });
+      return res.status(500).send({ error: "Erro ao listar classes" });
     }
   }
 
@@ -73,10 +36,10 @@ export class ClassRoomsController {
 
     try {
       const classroomRepository = new ClassRoomsRepository();
-      const student = await classroomRepository.delete(id);
-      return res.status(200).json(student);
+      const classroom = await classroomRepository.delete(id);
+      return res.status(200).json(classroom);
     } catch (error) {
-      return res.status(500).json({ error: "Erro ao deletar aluno" });
+      return res.status(500).json({ error: "Erro ao deletar classe" });
     }
   }
 }
