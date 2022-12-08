@@ -6,6 +6,6 @@ export class Teacher extends BaseModel {
     this.name = props.name;
     this.CPF = props.CPF;
     this.academicTitle = props.academicTitle;
-    this.subject = props.subject;
+    this.discipline = props.discipline;
   }
 }

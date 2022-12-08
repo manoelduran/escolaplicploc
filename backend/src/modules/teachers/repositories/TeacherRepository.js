@@ -8,7 +8,7 @@ export class TeacherRepository {
   }
 
   async create(teacher) {
-    const { name, CPF, academicTitle, discipline} = teacher;
+    const { name, CPF, academicTitle, discipline } = teacher;
     const query =
       "INSERT INTO teachers (name, cpf, academictitle, discipline) VALUES ($1, $2, $3, $4) RETURNING *";
 
