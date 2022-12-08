@@ -3,12 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { fetchAPI } from '../service/api';
 import { RoomCard } from "../components/RoomCard";
 import '../styles/classRooms.css';
-import { useTeachers } from '../context/TeachersContext';
 
 function ClassRooms() {
     const navigate = useNavigate();
     const [classRooms, setClassRooms] = useState([]);
-
     console.log('classRooms', classRooms)
     const fetchRooms = async () => {
         const response = await fetchAPI("/classrooms", 'get')
@@ -16,8 +14,6 @@ function ClassRooms() {
         console.log('roomsData', classRoomsData)
         setClassRooms(classRoomsData)
     }
-
-
     useEffect(() => {
         fetchRooms()
     }, [])

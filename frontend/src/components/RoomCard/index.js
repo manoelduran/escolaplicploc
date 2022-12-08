@@ -1,14 +1,21 @@
-import { useEffect } from 'react';
-import { useTeachers } from '../../context/TeachersContext';
+import { useEffect, useState } from 'react';
+import { fetchAPI } from '../../service/api';
 import './roomCard.css';
 
 
 function RoomCard({ classRoom, onClick }) {
-    const { teacher, showTeacher } = useTeachers();
+    const [teacher, setTeacher] = useState({})
+    const showTeacher = async (teacher_id) => {
+        console.log('teacher_id', teacher_id)
+        const selectedTeacher = await fetchAPI(`/teachers/${teacher_id}`, 'get')
+        const data = await selectedTeacher.json()
+        console.log('teachersData', data)
+        setTeacher(data)
+    }
     
     useEffect(() => {
         showTeacher(classRoom.teacher_id)
-    }, [])
+    }, [classRoom])
     return (
         <div className="cardContainer">
             <h1>Matéria: {classRoom?.subject}</h1>

@@ -7,7 +7,6 @@ export const TeachersContext = React.createContext({});
 
 function TeachersProvider({ children }) {
     const [teachers, setTeachers] = useState([]);
-    const [teacher, setTeacher] = useState({})
 
     async function fetchTeachers() {
         const TeachersCollection = await fetchAPI("/teachers", 'get')
@@ -16,9 +15,9 @@ function TeachersProvider({ children }) {
     }
 
     async function createTeacher(data) {
-        const newTeacher = data;
-        const updatedTeachers = teachers.push(newTeacher);
-        setTeachers(updatedTeachers);
+        console.log('data', data)
+        await fetchAPI("/teachers", 'post', data)
+        await fetchTeachers()
     }
 
     async function updateTeacher(id, data) {
@@ -32,26 +31,18 @@ function TeachersProvider({ children }) {
         setTeachers(removedTeacher);
     }
 
-    const showTeacher = async (teacher_id) => {
-        console.log('teacher_id', teacher_id)
-        const selectedTeacher = await fetchAPI(`/teachers/${teacher_id}`, 'get')
-        const data = await selectedTeacher.json()
-        console.log('teachersData', data)
-        setTeacher(data)
-    }
 
- useEffect(() => {
-    fetchTeachers()
- }, [])
+
+    useEffect(() => {
+        fetchTeachers()
+    }, [])
     return (
         <TeachersContext.Provider value={{
             teachers,
-            teacher,
             createTeacher,
             updateTeacher,
             deleteTeacher,
             fetchTeachers,
-            showTeacher
         }
         }>
             {children}

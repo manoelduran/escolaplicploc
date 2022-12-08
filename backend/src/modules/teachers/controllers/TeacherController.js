@@ -5,6 +5,7 @@ export class TeacherController {
   async create(req, res) {
     try {
       const data = req.body;
+      console.log('data', data)
       const teacherRepository = new TeacherRepository();
 
       if (!data || !data.name || !data.CPF || !data.academicTitle || !data.discipline) {
@@ -16,6 +17,7 @@ export class TeacherController {
       const teacher = new Teacher(data);
 
       const createdTeacher = await teacherRepository.create(teacher);
+      console.log('createdTeacher', createdTeacher)
       return res.status(201).send(createdTeacher);
     } catch (error) {
       console.log(error);
