@@ -1,10 +1,10 @@
-import { BaseModel } from "../../../shared/BaseModel";
+import { BaseModel } from "../../../shared/BaseModel.js";
 
-export class Classroom extends BaseModel {
-  constructor(id, teacher, students, subject) {
-    super(id);
-    this.teacher = teacher;
-    this.students = students;
-    this.subject = subject;
+export class ClassRoom extends BaseModel {
+  constructor(props) {
+    super(props.id);
+    this.teacher = props.teacher;
+    this.students = props.students;
+    this.subject = props.subject;
   }
 }
