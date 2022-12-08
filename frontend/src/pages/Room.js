@@ -1,59 +1,53 @@
+import React, { useEffect, useState } from 'react';
 import '../styles/room.css';
 import { useNavigate, useParams } from "react-router-dom";
+import { fetchAPI } from '../service/api';
 import { TeacherCard } from '../components/TeacherCard';
 import { StudentCard } from '../components/StudentCard';
 import { useStudents } from '../context/StudentsContext';
-import { useTeachers } from '../context/TeachersContext';
+
 
 function Room() {
     const { id } = useParams();
+    console.log('id', id)
     const navigate = useNavigate();
-    const { deleteStudent, showStudent } = useStudents()
-    const { deleteTeacher, showTeacher } = useTeachers()
-    const teacher = {
-        name: 'Teacher 1',
-        cpf: '023.332.353-11',
-        academic_title: 'Letras',
-        subject: 'Português'
+    const [teacher, setTeacher] = useState({})
+    const { deleteStudent, showStudent, students } = useStudents()
+    const fetchTeacher = async (id) => {
+        const response = await fetchAPI(`/teachers/${Number(1)}`, 'GET')
+        const teachersData = await response.json()
+        console.log('selectedTeacher', teachersData)
+        setTeacher(teachersData)
     }
-    const students3 = [
-        {
-            id: '1',
-            name: 'Student 1',
-            cpf: '023.332.353-11',
-            registration_number: '321312312',
-            room: '1'
-        },
-        {
-            id: '2',
-            name: 'Student 2',
-            cpf: '023.332.353-11',
-            registration_number: '321312312',
-            room: '1'
-        },
-        {
-            id: '3',
-            name: 'Student 3',
-            cpf: '023.332.353-11',
-            registration_number: '321312312',
-            room: '1'
-        }
-    ]
 
+    const handleShowTeacher = async (id) => {
+        //  const selectedTeacher = await fetchAPI(`/teachers/${id}`, 'get')
+        //const data = await selectedTeacher.json()
+        //console.log('teachersData', data)
+        navigate(`/showTeacher/${id}`)
+    }
+    const handleDeleteTeacher = async (id) => {
+        await fetchAPI(`/teachers/${id}`, 'delete')
+        navigate('/')
+    }
+    useEffect(() => {
+        fetchTeacher()
+    }, [id])
+    console.log('teacher', teacher)
     return (
         <div className="roomContainer">
             <div className="teacherContainer">
                 <TeacherCard
                     teacher={teacher}
-                    onShow={() => showTeacher(teacher?.id)}
-                    onDelete={() => deleteTeacher(teacher?.id)}
+                    onShow={() => handleShowTeacher(teacher.id)}
+                    onDelete={() => handleDeleteTeacher(teacher.id)}
                 />
                 <button className="addStudentButton" onClick={() => navigate(-1)}>Voltar</button>
 
             </div>
             <button className='headerButton' style={{ width: 'fit-content', alignSelf: 'flex-end' }} onClick={() => navigate(`/addEditStudent`)}>Criar Aluno</button>
             <div className='studentsContainer'>
-                {students3.map((student, index) => (
+                {students.map((student, index) => (
                     <StudentCard
                         key={index}
                         student={student}

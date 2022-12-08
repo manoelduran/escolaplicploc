@@ -8,9 +8,8 @@ function Home() {
     const navigate = useNavigate()
     const [school, setSchool] = useState({})
     const fetchSchool = async () => {
-        const response = await fetchAPI("/schools", 'get')
+        const response = await fetchAPI("/schools", 'GET')
         const schoolData = await response.json()
-        console.log('schoolData', schoolData)
         setSchool(schoolData[0])
     }
 

@@ -22,7 +22,6 @@ function AddEditTeacher() {
         console.log('teacher_id', teacher_id)
         const selectedTeacher = await fetchAPI(`/teachers/${teacher_id}`, 'get')
         const data = await selectedTeacher.json()
-        console.log('teachersData', data)
         setFormValue(data)
     }
     useEffect(() => {
@@ -43,7 +42,7 @@ function AddEditTeacher() {
             return;
         };
         console.log('event', formValue)
-       await fetchAPI("/teachers", 'post', event)
+       await fetchAPI("/teachers", 'post', {formValue})
         setTimeout(() => navigate("/"), 500);
     };
 

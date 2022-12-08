@@ -36,7 +36,6 @@ function AddEditStudent() {
             setTimeout(() => navigate("/"), 500);
             return;
         };
-        console.log('formValue', formValue)
        await createStudent(formValue);
         setTimeout(() => navigate("/"), 500);
     };

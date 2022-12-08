@@ -6,10 +6,8 @@ import './roomCard.css';
 function RoomCard({ classRoom, onClick }) {
     const [teacher, setTeacher] = useState({})
     const showTeacher = async (teacher_id) => {
-        console.log('teacher_id', teacher_id)
-        const selectedTeacher = await fetchAPI(`/teachers/${teacher_id}`, 'get')
+        const selectedTeacher = await fetchAPI(`/teachers/${Number(teacher_id)}`, 'get')
         const data = await selectedTeacher.json()
-        console.log('teachersData', data)
         setTeacher(data)
     }
     

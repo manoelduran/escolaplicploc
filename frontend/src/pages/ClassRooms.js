@@ -7,11 +7,9 @@ import '../styles/classRooms.css';
 function ClassRooms() {
     const navigate = useNavigate();
     const [classRooms, setClassRooms] = useState([]);
-    console.log('classRooms', classRooms)
     const fetchRooms = async () => {
-        const response = await fetchAPI("/classrooms", 'get')
+        const response = await fetchAPI("/classrooms", 'GET')
         const classRoomsData = await response.json()
-        console.log('roomsData', classRoomsData)
         setClassRooms(classRoomsData)
     }
     useEffect(() => {
