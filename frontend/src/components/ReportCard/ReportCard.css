@@ -8,13 +8,13 @@ table {
 }
 
 thead {
-  background-color: rgb(65, 104, 136);
-  color: white;
+  background: lightblue;
+  color: rgb(65, 104, 136);
 }
 
 th{
 
-  color: white;
+  color: rgb(65, 104, 136);
 }
 
 th, td {

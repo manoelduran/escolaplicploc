@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-
+import { fetchAPI } from "../service/api";
 
 
 
@@ -22,9 +22,8 @@ function StudentsProvider({ children }) {
     }
 
     async function updateStudent(id, data) {
-        const selectedStudent = students.filter(student => student.id === id)
-        const updatedList = students.push(...selectedStudent, data);
-        setStudents(updatedList)
+        const response = await fetchAPI(`/students/${id}`, "PUT", data);
+        setStudents(response.json());
     }
 
     async function deleteStudent(id) {

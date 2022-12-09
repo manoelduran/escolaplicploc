@@ -34,7 +34,7 @@ function Room() {
   useEffect(() => {
     fetchClassroom();
   }, [id]);
-
+  console.log(' classroom.students', classroom)
   return (
     <div className="roomContainer">
       <div className="teacherContainer">
@@ -63,6 +63,7 @@ function Room() {
               onDelete={() => handleDeleteStudent(student.id)}
             />
           ))
+
         }
       </div>
     </div>

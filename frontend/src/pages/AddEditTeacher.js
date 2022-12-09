@@ -18,7 +18,7 @@ function AddEditTeacher() {
   const { name, CPF, academicTitle, discipline } = formValue;
   console.log(formValue);
   const showTeacher = async (teacher_id) => {
-    const selectedTeacher = await fetchAPI(`/teachers/${teacher_id}`, "get");
+    const selectedTeacher = await fetchAPI(`/teachers/${teacher_id}`, "GET");
     const data = await selectedTeacher.json();
     setFormValue(data);
   };
@@ -38,7 +38,7 @@ function AddEditTeacher() {
       setTimeout(() => navigate("/"), 500);
       return;
     }
-    await fetchAPI("/teachers", "post", formValue);
+    await fetchAPI("/teachers", "POST", formValue);
     setTimeout(() => navigate("/"), 500);
   };
 
@@ -51,7 +51,7 @@ function AddEditTeacher() {
   return (
     <div className="addTeacherContainer">
       <div className="addTeacherInfo">
-        <h1 className="addTeacherTitle">Cadastre um professor:</h1>
+        <h1 className="addTeacherTitle">{editMode ? `Edite o professor:` : "Cadastre um professor:"}</h1>
         <button className="addTeacherButton" onClick={() => navigate(-1)}>
           Voltar
         </button>

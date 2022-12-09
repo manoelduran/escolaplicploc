@@ -16,7 +16,7 @@ const ReportCard = ({ reportcard, classroom, teacher }) => {
       <tbody>
         <tr>
           <td>{reportcard.id}</td>
-          <td>{reportcard.finalGrade}</td>
+          <td>{Number(reportcard.finalGrade)}</td>
           <td>{classroom?.subject}</td>
           <td>{teacher?.name}</td>
           <td>{reportcard?.approval ? "Sim" : "Não"}</td>

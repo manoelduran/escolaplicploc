@@ -68,6 +68,7 @@ export class StudentController {
 
   async updateStudent(req, res) {
     const id = req.params.id;
+
     if (!id) {
       return res.status(400).json({ message: "ID é obrigatório" });
     }

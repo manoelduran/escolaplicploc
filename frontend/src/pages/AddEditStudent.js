@@ -4,21 +4,20 @@ import { useStudents } from '../context/StudentsContext';
 import { fetchAPI } from '../service/api';
 import '../styles/addEditStudent.css';
 
-const initialState = {
-    name: "",
-    CPF: "",
-    registrationNumber: "",
-};
 
 function AddEditStudent() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [editMode, setEditMode] = useState(false);
-    const { updateStudent, createStudent } = useStudents();
-    const [formValue, setFormValue] = useState(initialState);
+    const { updateStudent } = useStudents();
+    const [formValue, setFormValue] = useState({
+        name: "",
+        CPF: "",
+        registrationNumber: "",
+    });
     const { name, CPF, registrationNumber } = formValue;
+    console.log(formValue);
     const showStudent = async (student_id) => {
-        console.log("student_id", student_id);
         const selectedStudent = await fetchAPI(`/students/${student_id}`, "GET");
         const data = await selectedStudent.json();
         setFormValue(data);
