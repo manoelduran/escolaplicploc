@@ -5,7 +5,7 @@ import { StudentsRepository } from "../repositories/StudentsRepository.js";
 export class StudentController {
   async create(req, res) {
     const data = req.body;
-
+    console.log('data', data)
     if (!data || !data.name || !data.CPF || !data.registrationNumber) {
       return res
         .status(400)

@@ -48,7 +48,7 @@ function Room() {
         Criar Aluno
       </button>
       <div className="studentsContainer">
-        {students.map((student, index) => (
+        {classroom.students.map((student, index) => (
           <StudentCard
             key={index}
             student={student}

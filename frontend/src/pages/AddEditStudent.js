@@ -1,42 +1,46 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import { useStudents } from '../context/StudentsContext';
+import { fetchAPI } from '../service/api';
 import '../styles/addEditStudent.css';
 
 const initialState = {
     name: "",
-    cpf: "",
-    room: "1",
-    registration_number: "",
+    CPF: "",
+    registrationNumber: "",
 };
 
 function AddEditStudent() {
     const { id } = useParams();
-    const { createStudent, updateStudent, showStudent } = useStudents()
     const navigate = useNavigate();
     const [editMode, setEditMode] = useState(false);
+    const { updateStudent, createStudent } = useStudents();
     const [formValue, setFormValue] = useState(initialState);
-    const { name, cpf, room, registration_number } = formValue;
-
+    const { name, CPF, registrationNumber } = formValue;
+    const showStudent = async (student_id) => {
+        console.log("student_id", student_id);
+        const selectedStudent = await fetchAPI(`/students/${student_id}`, "GET");
+        const data = await selectedStudent.json();
+        setFormValue(data);
+    };
     useEffect(() => {
         if (id) {
             setEditMode(true);
-            const selectedStudent = showStudent(id)
+            const selectedStudent = showStudent(id);
             setFormValue({ ...selectedStudent });
         }
-    }, [id, showStudent]);
+    }, [id]);
 
-
-    const handleSubmit = async  (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log('aq')
-        if (name && cpf && room && registration_number && editMode) {
-            await updateStudent({ id, formValue })
+        if (name && CPF && registrationNumber && editMode) {
+            await updateStudent({ id, formValue });
             setEditMode(false);
             setTimeout(() => navigate("/"), 500);
             return;
-        };
-       await createStudent(formValue);
+        }
+        console.log("event", formValue);
+        await fetchAPI("/students", "POST", formValue);
         setTimeout(() => navigate("/"), 500);
     };
 
@@ -44,7 +48,6 @@ function AddEditStudent() {
         event.preventDefault();
         let { name, value } = event.target;
         setFormValue({ ...formValue, [name]: value });
-
     };
 
     return (
@@ -56,10 +59,9 @@ function AddEditStudent() {
             <div className="formContainer">
                 <form onSubmit={handleSubmit}>
                     <input type='text' name='name' placeholder='Nome' required value={name || ""} onChange={onInputChange} />
-                    <input type='cpf' name='cpf' title='CPF' placeholder='CPF' required value={cpf || ""} onChange={onInputChange} />
-                    <input type='text' name='registration_number' title='Matrícula' placeholder='Número de Matrícula' required value={registration_number || ""} onChange={onInputChange} />
-                    <input type='text' name='room' title='Sala' placeholder='Sala' required value={room || ""} onChange={onInputChange} />
-                    <button type='submit'  className='addStudentButton' style={{ marginTop: 15 }}>{editMode ? "Editar" : "Criar"}</button>
+                    <input type='cpf' name='CPF' title='CPF' placeholder='CPF' required value={CPF || ""} onChange={onInputChange} />
+                    <input type='text' name='registrationNumber' title='Matrícula' placeholder='Número de Matrícula' required value={registrationNumber || ""} onChange={onInputChange} />
+                    <button type='submit' className='addStudentButton' style={{ marginTop: 15 }}>{editMode ? "Editar" : "Criar"}</button>
                 </form>
             </div>
         </div>
