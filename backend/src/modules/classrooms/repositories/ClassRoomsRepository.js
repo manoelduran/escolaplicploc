@@ -55,11 +55,33 @@ export class ClassRoomsRepository {
   }
 
   async getById(id) {
-    const query = "SELECT * FROM classrooms WHERE id = $1";
+    const query = `
+        SELECT 
+        cr.id, cr.subject,
+        json_agg(json_build_object(
+             'id', st.id,
+             'name', st.name,
+             'CPF', st.cpf,
+             'registrationNumber', st.registrationnumber,
+             'classroom_id', st.classroom_id
+         )) as students,
+        json_build_object(
+                'id', tc.id,
+                'name', tc.name,
+                'academicTitle', tc.academicTitle,
+                'discipline', tc.discipline
+        ) as teacher
+        FROM classrooms cr
+        LEFT JOIN (SELECT * FROM students) st ON st.classroom_id = cr.id
+        LEFT JOIN teachers tc ON (tc.id = cr.teacher_id)
+        WHERE cr.id = $1
+        GROUP BY tc.id, cr.id
+    `;
     const values = [id];
 
     try {
       const result = await this.pool.query(query, values);
+      console.log(result);
       return result.rows[0];
     } catch (error) {
       throw error;

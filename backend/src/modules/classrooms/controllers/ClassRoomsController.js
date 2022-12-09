@@ -13,6 +13,7 @@ export class ClassRoomsController {
 
       return res.status(200).json(classroom);
     } catch (error) {
+      console.log(error);
       return res.status(500).send({ error: "Erro ao buscar classe" });
     }
   }
@@ -21,7 +22,7 @@ export class ClassRoomsController {
     try {
       const classroomRepository = new ClassRoomsRepository();
       const classroom = await classroomRepository.getAll();
-      return res.send(classroom);
+      return res.json(classroom);
     } catch (error) {
       console.log(error);
       return res.status(500).send({ error: "Erro ao listar classes" });
