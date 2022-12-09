@@ -17,7 +17,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'MetropolisRegular';
   color: rgb(65, 104, 136);
 }
-li, ol, ul, input, span, button, label, p {
+li, ol, ul, input, span, button, label, p, th, td {
   font-family: 'MetropolisRegular';
   color: rgb(65, 104, 136);
 }

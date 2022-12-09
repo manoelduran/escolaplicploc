@@ -44,6 +44,10 @@ export class StudentsRepository {
             'id', cr.id, 
             'subject', cr.subject
           ) as classroom,
+          json_build_object(
+            'id', tc.id, 
+            'name', tc.name
+          ) as teacher,
           json_agg(json_build_object(
             'id', rp.id, 
             'approval', rp.approval,
@@ -52,9 +56,10 @@ export class StudentsRepository {
           )) as reportcards
         FROM students st 
         LEFT JOIN classrooms cr ON cr.id = st.classroom_id
+        LEFT JOIN teachers tc ON tc.id = cr.teacher_id
         LEFT JOIN reportcards rp ON rp.student_id = st.id
         WHERE st.id = $1
-        GROUP BY  st.id, cr.id;
+        GROUP BY  tc.id, st.id, cr.id;
          `,
         values
       );
