@@ -31,3 +31,12 @@ h4.teacherAcademicTitle {
 h4.teacherDiscipline {
     padding-top: 10px;
 }
+
+.reportCardContainer{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+max-width: 80%;
+margin: 0 auto;
+}
+
