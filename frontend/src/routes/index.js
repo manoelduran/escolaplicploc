@@ -6,6 +6,7 @@ import { AddEditStudent } from "../pages/AddEditStudent";
 import { AddEditTeacher } from "../pages/AddEditTeacher";
 import {TeacherProfile} from '../pages/TeacherProfile';
 import {StudentProfile} from '../pages/StudentProfile';
+import { AddEditStudentGrade } from "../pages/AddEditStudentGrade";
 import { Room } from "../pages/Room";
 
 const Router = () => {
@@ -18,6 +19,8 @@ const Router = () => {
             <Route path="/AddEditTeacher" element={<AddEditTeacher />} />
             <Route path="/classRooms" element={<ClassRooms />} />
             <Route path="/classRooms/:id" element={<Room />} />
+            <Route path="classRooms/student$/:id/grade" element={<AddEditStudentGrade />} />
+            <Route path="classRooms/student$/:id/grade/:id" element={<AddEditStudentGrade />} />
             <Route path="/showTeacher/:id" element={<TeacherProfile />} />
             <Route path="/showStudent/:id" element={<StudentProfile />} />
         </Routes>
