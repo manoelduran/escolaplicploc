@@ -7,29 +7,50 @@ import "../styles/teacherProfile.css";
 function StudentProfile() {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [student, setStudent] = useState({});
-  const [classRooms, setClassRooms] = useState([])
+  const [classRooms, setClassRooms] = useState([]);
+
+  const [selectedClassroomId, setSelectedClassroomId] = useState(0);
+
   const fetchStudent = async () => {
     const response = await fetchAPI(`/students/${Number(id)}`, "GET");
     const studentData = await response.json();
     setStudent(studentData);
   };
+
   const fetchClassRooms = async () => {
     const response = await fetchAPI(`/classrooms`, "GET");
     const classRoomsData = await response.json();
-    setClassRooms(classRoomsData);
+    setClassRooms(
+      classRoomsData.filter((classroom) => {
+        return classroom.id !== id;
+      })
+    );
   };
+
   const handleChange = (event) => {
     event.preventDefault();
-    setClassRooms(event.target.value)
-  }
-  console.log(student);
+    setSelectedClassroomId(event.target.value.id);
+  };
+
+  const handleRegistry = async () => {
+    try {
+      const response = await fetchAPI(`/students/${student.id}`, "PUT", {
+        classroom_id: selectedClassroomId,
+      });
+
+      await response.json();
+
+      navigate(`/classrooms/${selectedClassroomId}`);
+    } catch (error) {}
+  };
 
   useEffect(() => {
     fetchStudent();
-    fetchClassRooms()
+    fetchClassRooms();
   }, [id]);
-console.log('classRooms', classRooms)
+
   return (
     <div className="studentProfileContainer">
       <div className="studentProfileInfoContainer">
@@ -41,11 +62,28 @@ console.log('classRooms', classRooms)
         </h4>
       </div>
       <div className="buttonsDiv">
-        <select onChange={handleChange} style={{paddingRight: 20, alignSelf: 'center', justifySelf: 'center', marginRight: 50, width: 200, height: 50}}>
+        <select
+          onChange={handleChange}
+          style={{
+            paddingRight: 20,
+            alignSelf: "center",
+            justifySelf: "center",
+            marginRight: 50,
+            width: 200,
+            height: 50,
+          }}
+        >
           {classRooms?.map((classRoom, index) => (
-            <option key={index} value={classRoom.id} > Turma:{classRoom.subject}</option>
+            <option key={index} value={classRoom.id}>
+              {" "}
+              Turma:{classRoom.subject}
+            </option>
           ))}
         </select>
+        <button className="addStudentButton" onClick={handleRegistry}>
+          Matricular estudante
+        </button>
+
         <button
           className="addStudentButton"
           onClick={() => navigate(`/AddEditstudent/${student.id}`)}
