@@ -4,22 +4,20 @@ import { useTeachers } from "../context/TeachersContext";
 import { fetchAPI } from "../service/api";
 import "../styles/addEditTeacher.css";
 
-const initialState = {
-  name: "",
-  CPF: "",
-  academicTitle: "",
-  discipline: "",
-};
-
 function AddEditTeacher() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [editMode, setEditMode] = useState(false);
-  const { updateTeacher, createTeacher } = useTeachers();
-  const [formValue, setFormValue] = useState(initialState);
+  const { updateTeacher } = useTeachers();
+  const [formValue, setFormValue] = useState({
+    name: "",
+    CPF: "",
+    academicTitle: "",
+    discipline: "",
+  });
   const { name, CPF, academicTitle, discipline } = formValue;
+  console.log(formValue);
   const showTeacher = async (teacher_id) => {
-    console.log("teacher_id", teacher_id);
     const selectedTeacher = await fetchAPI(`/teachers/${teacher_id}`, "get");
     const data = await selectedTeacher.json();
     setFormValue(data);
@@ -35,12 +33,11 @@ function AddEditTeacher() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (name && CPF && academicTitle && discipline && editMode) {
-      await updateTeacher({ id, formValue });
+      await updateTeacher(id, formValue);
       setEditMode(false);
       setTimeout(() => navigate("/"), 500);
       return;
     }
-    console.log("event", formValue);
     await fetchAPI("/teachers", "post", formValue);
     setTimeout(() => navigate("/"), 500);
   };
@@ -50,6 +47,7 @@ function AddEditTeacher() {
     let { name, value } = event.target;
     setFormValue({ ...formValue, [name]: value });
   };
+
   return (
     <div className="addTeacherContainer">
       <div className="addTeacherInfo">
