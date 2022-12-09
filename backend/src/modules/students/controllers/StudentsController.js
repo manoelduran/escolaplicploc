@@ -1,11 +1,12 @@
 import { ClassRoomsRepository } from "../../classrooms/repositories/ClassRoomsRepository.js";
 import { Student } from "../models/Student.js";
 import { StudentsRepository } from "../repositories/StudentsRepository.js";
+import { ReportCardsRepository } from "../../reportcards/repositories/ReportCardsRepository.js";
 
 export class StudentController {
   async create(req, res) {
     const data = req.body;
-    console.log('data', data)
+
     if (!data || !data.name || !data.CPF || !data.registrationNumber) {
       return res
         .status(400)
@@ -86,51 +87,51 @@ export class StudentController {
         });
       }
 
-      let classroom = student.classroom;
-
       if (data.classroom_id) {
         const classroomExists = await classRoomRepository.getById(
           data.classroom_id
         );
 
         if (!classroomExists) {
-          return res.status(400).json({
-            message: "classroom não encontrada",
-          });
-        }
-
-        const reportCardExists = await reportCardsRepository.getById(id);
-
-        if (!reportCardExists) {
           return res.status(400).send({
-            message: "Não é possivel atualizar a classroom pois não ha boletim",
+            message: "Modulo inexiste",
           });
         }
 
-        if (!reportCardExists.approved) {
+        if (
+          student.reportcards.find((reportCard) => {
+            return reportCard.classroom.id === data.classroom_id;
+          })
+        ) {
+          return res.status(400).send({
+            message: "Você já foi aprovado para este modulo",
+          });
+        }
+
+        if (!student.reportcards[0].approval) {
           return res.status(400).send({
             message:
               "Não é possivel atualizar a classroom pois o aluno não foi aprovado",
           });
         }
 
-        classroom = classroomExists;
+        student.classroom = classroomExists;
       }
 
       const updatedStudent = await studentsRepository.update(
         new Student({
+          ...student,
           name: data.name || student.name,
           CPF: data.CPF || student.CPF,
           registrationNumber:
             data.registrationNumber || student.registrationNumber,
-          classroom,
         })
       );
 
       return res.status(200).send(updatedStudent);
     } catch (error) {
       console.log(error);
-      return res.status(500).send({ error: "Erro ao atualizar professor" });
+      return res.status(500).send({ error: "Erro ao atualizar aluno" });
     }
   }
 

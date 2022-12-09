@@ -42,7 +42,7 @@ export class ReportCardsRepository {
 
     try {
       const result = await this.pool.query(query, values);
-      return this.mapToModel(result.rows[0]);
+      return result.rows[0];
     } catch (error) {
       throw error;
     }

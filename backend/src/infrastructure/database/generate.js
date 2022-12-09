@@ -29,7 +29,6 @@ async function generate() {
         columns: `
           "id" SERIAL PRIMARY KEY,
           "teacher_id" INTEGER,
-          "students" INTEGER[] NULL,
           "subject" VARCHAR(255),
           FOREIGN KEY ("teacher_id") REFERENCES teachers("id")
         `,

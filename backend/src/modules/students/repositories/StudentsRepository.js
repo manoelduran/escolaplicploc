@@ -39,7 +39,8 @@ export class StudentsRepository {
 
     try {
       const result = await this.pool.query(
-        `SELECT st.id, st.name, st.cpf AS "CPF", st.registrationnumber AS "registrationNumber",
+        `
+        SELECT st.id, st.name, st.cpf AS "CPF", st.registrationnumber AS "registrationNumber",
           json_build_object(
             'id', cr.id, 
             'subject', cr.subject
@@ -49,15 +50,21 @@ export class StudentsRepository {
             'name', tc.name
           ) as teacher,
           json_agg(json_build_object(
-            'id', rp.id, 
             'approval', rp.approval,
             'finalGrade', rp."finalGrade",
-            'approval', rp.approval
+            'approval', rp.approval,
+            'classroom',  json_build_object(
+            'id', cr.id,
+            'subject', cr.subject
+          )
           )) as reportcards
         FROM students st 
         LEFT JOIN classrooms cr ON cr.id = st.classroom_id
         LEFT JOIN teachers tc ON tc.id = cr.teacher_id
-        LEFT JOIN reportcards rp ON rp.student_id = st.id
+        LEFT JOIN (
+          SELECT * FROM reportcards
+          RIGHT JOIN classrooms rpc ON rpc.id = reportcards.classroom_id
+        ) rp ON rp.student_id = st.id
         WHERE st.id = $1
         GROUP BY  tc.id, st.id, cr.id;
          `,
@@ -82,10 +89,9 @@ export class StudentsRepository {
     }
   }
 
-  async update(school) {
-    const { id, name, CPF, logo, address } = school;
-    const query = `UPDATE students SET name = $1, cpf = $2, logo = $3, address = $4 WHERE id = $5 RETURNING ${this.selectFormatted} `;
-    const values = [name, CPF, logo, address, id];
+  async update({ name, classroom, registrationNumber, CPF, id }) {
+    const query = `UPDATE students SET name = $1, cpf = $2,  registrationnumber = $3, classroom_id = $4 WHERE id = $5 RETURNING ${this.selectFormatted} `;
+    const values = [name, CPF, registrationNumber, classroom.id, id];
 
     try {
       const result = await this.pool.query(query, values);

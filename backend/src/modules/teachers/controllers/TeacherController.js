@@ -52,7 +52,7 @@ export class TeacherController {
     try {
       const teacherRepository = new TeacherRepository();
       const teacher = await teacherRepository.getById(id);
-  
+
       return res.status(200).json(teacher);
     } catch (error) {
       console.log(error);

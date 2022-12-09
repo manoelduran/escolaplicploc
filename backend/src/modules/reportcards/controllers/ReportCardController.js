@@ -1,4 +1,3 @@
-import { ClassRoomsRepository } from "../../classrooms/repositories/ClassRoomsRepository.js";
 import { StudentsRepository } from "../../students/repositories/StudentsRepository.js";
 import { ReportCard } from "../models/ReportCard.js";
 import { ReportCardsRepository } from "../repositories/ReportCardsRepository.js";
@@ -9,7 +8,7 @@ export class ReportCardController {
 
     if (!data.student_id || !data.finalGrade) {
       return res.status(400).json({
-        message: "student_id, classroom_id, finalGrade",
+        message: "student_id, finalGrade",
       });
     }
 
@@ -22,11 +21,17 @@ export class ReportCardController {
         return res.status(400).send({ error: "student não encontrado" });
       }
 
+      if (!studentExists) {
+        return res.status(400).send({ error: "student não encontrado" });
+      }
+
       if (!studentExists.classroom) {
         return res
           .status(400)
           .send({ error: "student não esta matriculado em nenhuma classe" });
       }
+
+      console.log(studentExists);
 
       const reportCard = new ReportCard({
         finalGrade: data.finalGrade,

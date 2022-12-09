@@ -48,7 +48,10 @@ export class ClassRoomsRepository {
 
       const result = await this.pool.query(query);
 
-      return result.rows;
+      return result.rows.map((row) => ({
+        ...row,
+        students: row.students.filter((student) => student.id),
+      }));
     } catch (error) {
       throw error;
     }
@@ -72,7 +75,7 @@ export class ClassRoomsRepository {
                 'discipline', tc.discipline
         ) as teacher
         FROM classrooms cr
-        LEFT JOIN (SELECT * FROM students) st ON st.classroom_id = cr.id
+        LEFT JOIN students st ON st.classroom_id = cr.id
         LEFT JOIN teachers tc ON (tc.id = cr.teacher_id)
         WHERE cr.id = $1
         GROUP BY tc.id, cr.id
@@ -81,8 +84,12 @@ export class ClassRoomsRepository {
 
     try {
       const result = await this.pool.query(query, values);
-      console.log(result);
-      return result.rows[0];
+      return (
+        !!result.rows[0] && {
+          ...result.rows[0],
+          students: result?.rows[0]?.students.filter((student) => student.id),
+        }
+      );
     } catch (error) {
       throw error;
     }

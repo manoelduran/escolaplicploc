@@ -16,6 +16,7 @@ export class TeacherRepository {
 
     try {
       const result = await this.pool.query(query, values);
+
       return result.rows[0];
     } catch (error) {
       throw error;
