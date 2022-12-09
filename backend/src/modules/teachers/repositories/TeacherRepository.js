@@ -32,7 +32,8 @@ export class TeacherRepository {
   }
 
   async getById(id) {
-    const query = "SELECT * FROM teachers WHERE id = $1";
+    const query =
+      'SELECT id, name, cpf as "CPF", academictitle as "academicTitle", discipline FROM teachers WHERE id = $1';
     const values = [id];
 
     try {
