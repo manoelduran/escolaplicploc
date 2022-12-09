@@ -35,13 +35,31 @@ export class StudentsRepository {
   }
 
   async getById(id) {
-    const query = `SELECT ${this.selectFormatted} FROM students WHERE id = $1`;
-
     const values = [id];
 
     try {
-      const result = await this.pool.query(query, values);
-      return result.rows.length == 0 ? null : this.mapToModel(result.rows[0]);
+      const result = await this.pool.query(
+        `SELECT st.id, st.name, st.cpf AS "CPF", st.registrationnumber AS "registrationNumber",
+          json_build_object(
+            'id', cr.id, 
+            'subject', cr.subject
+          ) as classroom,
+          json_agg(json_build_object(
+            'id', rp.id, 
+            'approval', rp.approval,
+            'finalGrade', rp."finalGrade",
+            'approval', rp.approval
+          )) as reportcards
+        FROM students st 
+        LEFT JOIN classrooms cr ON cr.id = st.classroom_id
+        LEFT JOIN reportcards rp ON rp.student_id = st.id
+        WHERE st.id = $1
+        GROUP BY  st.id, cr.id;
+         `,
+        values
+      );
+
+      return result.rows[0];
     } catch (error) {
       throw error;
     }
