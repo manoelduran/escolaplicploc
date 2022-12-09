@@ -31,9 +31,8 @@ function Room() {
         navigate('/')
     }
     useEffect(() => {
-        fetchTeacher()
+        fetchTeacher(id)
     }, [id])
-    console.log('teacher', teacher)
     return (
         <div className="roomContainer">
             <div className="teacherContainer">

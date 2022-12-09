@@ -6,7 +6,7 @@ function TeacherCard({ teacher, onShow, onDelete }) {
 
     return (
         <div className="teacherCardContainer">
-            <h1>Matéria: {teacher.discipline}</h1>
+            <h1>Disciplina: {teacher.discipline}</h1>
             <h4>Professor: {teacher.name}</h4>
             <div className='teacherButtonContainer'>
                 <button className="enterButton" onClick={onShow}>Visualizar</button>

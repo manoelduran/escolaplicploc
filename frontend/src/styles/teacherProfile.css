@@ -1,0 +1,33 @@
+div.teacherProfileContainer {
+    width: 100%;
+    height: 100vh;
+    padding: 50px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+div.teacherProfileInfoContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+
+}
+h4.teacherTitle {
+    padding-top: 10px;
+}
+h4.teacherName {
+    padding-top: 10px;
+}
+
+h4.teacherCPF {
+    padding-top: 10px;
+}
+
+h4.teacherAcademicTitle {
+    padding-top: 10px;
+}
+h4.teacherDiscipline {
+    padding-top: 10px;
+}
