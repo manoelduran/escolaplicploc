@@ -19,10 +19,18 @@ function Home() {
     return (
         <div className='container'>
             <div className='schoolContainer'>
-                <h1 className='schoolTitle'>Informações da Escola</h1>
-                <h4 className='schoolName'>Nome: {school.name}</h4>
-                <h4 className='schoolCNPJ'>CNPJ: {school.cnpj}</h4>
-                <h4 className='schoolAddress'>Endereço: {school.address}</h4>
+               {
+                school ? (
+                    <>
+                    <h1 className='schoolTitle'>Informações da Escola</h1>
+                    <h4 className='schoolName'>Nome: {school?.name}</h4>
+                    <h4 className='schoolCNPJ'>CNPJ: {school?.cnpj}</h4>
+                    <h4 className='schoolAddress'>Endereço: {school?.address}</h4>
+                    </>
+                ) : (
+                    <h1>Escola não encontrada</h1>
+                )
+               }
             </div>
             <div className='buttonsContainer'>
                 <button className='headerButton' onClick={() => navigate(`/classRooms`)}>Visualizar turmas</button>

@@ -4,13 +4,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { fetchAPI } from "../service/api";
 import { TeacherCard } from "../components/TeacherCard";
 import { StudentCard } from "../components/StudentCard";
-import { useStudents } from "../context/StudentsContext";
 
 function Room() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [classroom, setClassroom] = useState({});
-  const { deleteStudent, showStudent, students } = useStudents();
 
   const fetchClassroom = async () => {
     const response = await fetchAPI(`/classrooms/${Number(id)}`, "GET");
@@ -23,6 +21,14 @@ function Room() {
     //const data = await selectedTeacher.json()
     //console.log('teachersData', data)
     navigate(`/showTeacher/${classroom.teacher.id}`);
+  };
+
+  const handleDeleteStudent = async (id) => {
+    //  const selectedTeacher = await fetchAPI(`/teachers/${id}`, 'get')
+    //const data = await selectedTeacher.json()
+    //console.log('teachersData', data)
+    await fetchAPI(`/students/${Number(id)}`, 'DELETE')
+    navigate("/")
   };
 
   useEffect(() => {
@@ -48,14 +54,16 @@ function Room() {
         Criar Aluno
       </button>
       <div className="studentsContainer">
-        {classroom.students.map((student, index) => (
-          <StudentCard
-            key={index}
-            student={student}
-            onShow={() => showStudent(student.id)}
-            onDelete={() => deleteStudent(student.id)}
-          />
-        ))}
+        {
+          classroom?.students?.map((student, index) => (
+            <StudentCard
+              key={index}
+              student={student}
+              onShow={() => navigate(`/showStudent/${student.id}`)}
+              onDelete={() => handleDeleteStudent(student.id)}
+            />
+          ))
+        }
       </div>
     </div>
   );
