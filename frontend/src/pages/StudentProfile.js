@@ -31,7 +31,7 @@ function StudentProfile() {
 
   const handleChange = (event) => {
     event.preventDefault();
-    setSelectedClassroomId(event.target.value.id);
+    setSelectedClassroomId(event.target.value);
   };
 
   const handleRegistry = async () => {
@@ -39,9 +39,8 @@ function StudentProfile() {
       const response = await fetchAPI(`/students/${student.id}`, "PUT", {
         classroom_id: selectedClassroomId,
       });
-
+     
       await response.json();
-
       navigate(`/classrooms/${selectedClassroomId}`);
     } catch (error) {}
   };

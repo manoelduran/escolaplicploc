@@ -5,6 +5,7 @@ import { fetchAPI } from '../service/api';
 import '../styles/addEditStudentGrade.css';
 
 
+
 function AddEditStudentGrade() {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -12,32 +13,28 @@ function AddEditStudentGrade() {
     const { updateStudent } = useStudents();
     const [formValue, setFormValue] = useState({
         finalGrade: "",
+        student_id: ""
     });
-    const { finalGrade } = formValue;
-    console.log(formValue);
-    const showStudent = async (student_id) => {
-        const selectedStudent = await fetchAPI(`/students/${student_id}`, "GET");
+    const { finalGrade  } = formValue;
+    const showReportCard = async () => {
+        console.log('student_id', id)
+        const selectedStudent = await fetchAPI(`/reportcards/${Number(id)}`, "GET");
         const data = await selectedStudent.json();
+        console.log('data', data)
         setFormValue(data);
     };
     useEffect(() => {
         if (id) {
             setEditMode(true);
-            const selectedStudent = showStudent(id);
+            const selectedStudent = showReportCard(id);
+            console.log('selectedStudent', selectedStudent)
             setFormValue({ ...selectedStudent });
         }
     }, [id]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        if (finalGrade && editMode) {
-            await updateStudent({ id, formValue });
-            setEditMode(false);
-            setTimeout(() => navigate("/"), 500);
-            return;
-        }
-        console.log("event", formValue);
-        await fetchAPI("/students", "POST", formValue);
+        await fetchAPI(`/reportcards/`, "POST", {finalGrade: finalGrade, student_id: id});
         setTimeout(() => navigate("/"), 500);
     };
 
@@ -50,14 +47,14 @@ function AddEditStudentGrade() {
     return (
         <div className="addStudentContainer">
             <div className="addStudentInfo">
-                <h1 className="addStudentTitle"> {editMode ? `Edite o estudante:` : "Cadastre um estudante:"}</h1>
+                <h1 className="addStudentTitle"> Adicione uma nota a este estudante:</h1>
                 <button className="addStudentButton" onClick={() => navigate(-1)}>Voltar</button>
             </div>
             <div className="formContainer">
                 <form onSubmit={handleSubmit}>
-                    <input type='text' name='finalGrade' placeholder='Nome' required value={finalGrade || ""} onChange={onInputChange} />
+                    <input type='number' name='finalGrade' placeholder='Nota' required value={finalGrade || ""} onChange={onInputChange} />
 
-                    <button type='submit' className='addStudentButton' style={{ marginTop: 15 }}>{editMode ? "Editar" : "Criar"}</button>
+                    <button type='submit' className='addStudentButton' style={{ marginTop: 15 }}>Adicionar</button>
                 </form>
             </div>
         </div>

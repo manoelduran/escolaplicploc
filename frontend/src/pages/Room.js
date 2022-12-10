@@ -59,6 +59,7 @@ function Room() {
             <StudentCard
               key={index}
               student={student}
+              onAddNota={() => navigate(`/classRooms/${student.id}/grade`)}
               onShow={() => navigate(`/showStudent/${student.id}`)}
               onDelete={() => handleDeleteStudent(student.id)}
             />

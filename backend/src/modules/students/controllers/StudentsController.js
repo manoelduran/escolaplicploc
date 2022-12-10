@@ -76,6 +76,7 @@ export class StudentController {
 
     try {
       const data = req.body;
+      console.log('data', data)
       const studentsRepository = new StudentsRepository();
       const classRoomRepository = new ClassRoomsRepository();
 

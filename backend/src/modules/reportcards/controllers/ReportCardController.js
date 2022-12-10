@@ -84,12 +84,14 @@ export class ReportCardController {
 
   async updateRecordCard(req, res) {
     const id = req.params.id;
+    console.log('id', id)
     if (!id) {
       return res.status(400).json({ message: "ID é obrigatório" });
     }
 
     try {
       const data = req.body;
+      console.log('data321', data)
       const reportCardsRepository = new ReportCardsRepository();
       const studentsRepository = new StudentsRepository();
       const classRoomRepository = new ClassRoomsRepository();
